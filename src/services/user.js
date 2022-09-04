@@ -74,7 +74,7 @@ module.exports= {
             return res.status(200).json(result)
         })
         .catch(err => {
-            return res.status(200).json(err)
+            return res.status(400).json({success:false, message: err})
         })
     },
 
@@ -83,7 +83,7 @@ module.exports= {
             return res.status(200).json(result)
         })
         .catch(err => {
-            return res.status(200).json(err)
+            return res.status(400).json({success:false, message: err})
         })
     },
 
@@ -92,6 +92,10 @@ module.exports= {
         User.findOne({where: 
             {
                 user_name: req.body.user_name
+            },
+            include:{
+                model: Role,
+                attributes: ['id', 'role']
             }
         })
         .then(user => {
@@ -103,15 +107,22 @@ module.exports= {
                 if(!result)
                     return res.status(400).json({success: false, message:"Password Incorrect"})
                 const payload = {
-                    userId: user.id,
+                    // userId: user.id,
                     user:{
-                        Name: user.full_name,
-                        Username: user.user_name,
-                        Email: user.email,
+                        id: user.id,
+                        name: user.full_name,
+                        user_name: user.user_name,
+                        email: user.email,
+                        Roles: user.Roles?.map(role => {
+                            return {
+                                id: role.id,
+                                role: role.role
+                            }
+                        })
                     }
                 }
                 const accessToken = await jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d'});
-                res.status(200).json({success:true, message:{token: accessToken}})
+                res.status(200).json({success:true, message:{token: accessToken, user: payload.user}})
             });
         })
         .catch(err => res.status(400).json({success: false,message: err.message}))
