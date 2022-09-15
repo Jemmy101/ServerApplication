@@ -17,10 +17,14 @@ const deleteProduct = (req, res)=>{
     ProductService.deleteProduct(req, res)
 }
 
+const getProductById = (req, res)=>{
+    ProductService.getProductById(req, res)
+}
 
 module.exports ={
     createProduct,
     getAllProduct,
     editProduct,
-    deleteProduct
+    deleteProduct,
+    getProductById
 }

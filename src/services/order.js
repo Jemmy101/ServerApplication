@@ -1,5 +1,6 @@
-const {Order, Product, User} = require('../models')
+const {Order, Product, User, Category, Primary_Category} = require('../models')
 const jwt = require('jsonwebtoken');
+const { Op } = require("sequelize");
 
 function extractToken (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -40,15 +41,24 @@ module.exports = {
     },
     async getAllOrder(req, res){
         try{
-            const {myOrders} = req.query;
+            const {myOrders, productId, categoryId, primaryCategoryId} = req.query;
             let query = {
+                where: {},
                 include:[{
                     model: User,
                     attributes: ['id','full_name','user_name','email']
                 },
                 {
                     model: Product,
-                    attributes: ['id','name','code','price']
+                    attributes: ['id','name','code','price'],
+                    include: {
+                        model: Category,
+                    attributes: {exclude:['createdAt','updatedAt','primaryCategoryId']},
+                        include: {
+                            model: Primary_Category,
+                        attributes: {exclude:['createdAt','updatedAt']},
+                        }
+                    }
                 }]
             };
             if(myOrders && myOrders.toLowerCase() === 'true'){
@@ -56,6 +66,30 @@ module.exports = {
                 const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
                 query.where = {
                     userId: decoded?.user?.id
+                }
+            }
+            if(productId){
+                query.where= {
+                    productId 
+                }
+            }
+            if(categoryId){
+                const products = await Product.findAll({where:{categoryId}});
+                query.where.productId = {
+                    [Op.in]: products.map(p => p.id)
+                }
+            }
+            if(primaryCategoryId){
+                const primaryCategory = await Primary_Category.findByPk(primaryCategoryId, {
+                    include: {
+                        model: Category,
+                        include: {
+                            model: Product
+                        }
+                    }
+                });
+                query.where.productId = {
+                    [Op.in]: primaryCategory?.Categories.reduce((acc, val)=> [...acc, ...val.Products.map(p => p.id)], [])
                 }
             }
             const result = await Order.findAll(query);

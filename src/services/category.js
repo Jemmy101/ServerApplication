@@ -1,4 +1,5 @@
 const {Category, Primary_Category} = require('../models')
+const { Op } = require("sequelize");
 
 module.exports = {
     async createCategory(req, res) {
@@ -21,7 +22,23 @@ module.exports = {
     },
     async getAllCategory(req, res){
         try{
-            const result = await Category.findAll();
+            const {primaryCategoryId, name} = req.query;
+            const query = {
+                where: {},
+                include:{
+                    model: Primary_Category,
+                    attributes: {exclude:['createdAt','updatedAt']}
+                }
+            }
+            if(primaryCategoryId){
+                query.where.primaryCategoryId = primaryCategoryId
+            }
+            if(name){
+                query.where.name =  {
+                    [Op.iLike]: `%${String(name)}%`
+                }
+            }
+            const result = await Category.findAll(query);
             if(result){
                 return res.status(200).json({success: true, message: result})
             }

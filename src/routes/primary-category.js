@@ -66,6 +66,11 @@ router.post('/', (req, res)=>{
  *      security: [{
  *          jwt: []
  *      }]
+ *      parameters:
+ *        - in: query
+ *          name: name
+ *          type: string
+ *          example: woolen
  *      responses:
  *          200:
  *              description: OK

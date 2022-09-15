@@ -86,6 +86,18 @@ router.post('/', (req, res)=>{
  *          name: myOrders
  *          type: boolean
  *          example: true
+ *        - in: query
+ *          name: productId
+ *          type: number
+ *          example: 1
+ *        - in: query
+ *          name: categoryId
+ *          type: number
+ *          example: 1
+ *        - in: query
+ *          name: primaryCategoryId
+ *          type: number
+ *          example: 1
  *      security: [{
  *          jwt: []
  *      }]
@@ -122,7 +134,7 @@ router.post('/', (req, res)=>{
  *                                              example: 3000
  *                                          status:
  *                                              type: string
- *                                              example: status
+ *                                              example: PENDING
  *                                          User:
  *                                              type: object
  *                                              properties:
@@ -138,7 +150,7 @@ router.post('/', (req, res)=>{
  *                                                  email:
  *                                                      type: string
  *                                                      example: jemmy@gmail.com
- *                                          Order:
+ *                                          Product:
  *                                              type: object
  *                                              properties:
  *                                                  id:
@@ -153,6 +165,24 @@ router.post('/', (req, res)=>{
  *                                                  price:
  *                                                      type: number
  *                                                      example: 1200
+ *                                                  Category:
+ *                                                      type: object
+ *                                                      properties: 
+ *                                                          id:
+ *                                                              type: number
+ *                                                              example: 1
+ *                                                          name:
+ *                                                              type: string
+ *                                                              example: Woolen
+ *                                                          Primary_Category:
+ *                                                              type: object
+ *                                                              properties:
+ *                                                                  id:
+ *                                                                      type: number
+ *                                                                      example: 2
+ *                                                                  name:
+ *                                                                      type: string
+ *                                                                      example: Jackets   
  *          401:
  *              description: Not authenticated
  *          403:

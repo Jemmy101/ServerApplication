@@ -71,6 +71,15 @@ router.post('/', (req, res)=>{
  *      security: [{
  *          jwt: []
  *      }]
+ *      parameters:
+ *        - in: query
+ *          name: primaryCategoryId
+ *          type: number
+ *          example: 1
+ *        - in: query
+ *          name: name
+ *          type: string
+ *          example: woolen
  *      responses:
  *          200:
  *              description: OK
@@ -93,6 +102,15 @@ router.post('/', (req, res)=>{
  *                                          primaryCategoryId:
  *                                              type: number
  *                                              example: 1
+ *                                          Primary_Category:
+ *                                              type: object
+ *                                              properties:
+ *                                                  id:
+ *                                                      type: number
+ *                                                      example: 6
+ *                                                  name:
+ *                                                      type: string
+ *                                                      example: Jacket
  *          401:
  *              description: Not authenticated
  *          403:
