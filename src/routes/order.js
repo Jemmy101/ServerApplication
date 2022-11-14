@@ -83,19 +83,11 @@ router.post('/', (req, res)=>{
  *          - application/json
  *      parameters:
  *        - in: query
- *          name: myOrders
- *          type: boolean
- *          example: true
- *        - in: query
  *          name: productId
  *          type: number
  *          example: 1
  *        - in: query
  *          name: categoryId
- *          type: number
- *          example: 1
- *        - in: query
- *          name: primaryCategoryId
  *          type: number
  *          example: 1
  *      security: [{
@@ -173,16 +165,7 @@ router.post('/', (req, res)=>{
  *                                                              example: 1
  *                                                          name:
  *                                                              type: string
- *                                                              example: Woolen
- *                                                          Primary_Category:
- *                                                              type: object
- *                                                              properties:
- *                                                                  id:
- *                                                                      type: number
- *                                                                      example: 2
- *                                                                  name:
- *                                                                      type: string
- *                                                                      example: Jackets   
+ *                                                              example: Woolen 
  *          401:
  *              description: Not authenticated
  *          403:

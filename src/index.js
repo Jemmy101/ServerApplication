@@ -54,7 +54,8 @@ const swaggerDocs = swaggerJsDoc({
 // swagger options
 const swaggerOptions = {
     customCss: '.swagger-ui .topbar { display: none } ',
-    customSiteTitle: 'Braided API Documentation'
+    customSiteTitle: 'Braided API Documentation',
+    swaggerOptions: {docExpansion: "none",persistAuthorization: true},
 }
 
 //Swagger API doc endpoint

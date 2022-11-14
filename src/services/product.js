@@ -1,4 +1,4 @@
-const {Product,Primary_Category,Category} = require('../models')
+const {Product,Category} = require('../models')
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -22,20 +22,20 @@ module.exports = {
     },
     async getAllProduct(req, res){
         try{
-            const {primaryCategoryId, categoryId} = req.query;
+            const {categoryId} = req.query;
             let whereObject = {};
-            if(primaryCategoryId){
-                const primaryCategory = await Primary_Category.findByPk(primaryCategoryId)
-                if(!primaryCategory){
-                    return res.status(400).json({success: false, message: 'Primary Category not found'})
-                }
-                const category = await Category.findAll({where: {
-                    primaryCategoryId: primaryCategory.id
-                }})
-                whereObject.categoryId = {
-                    [Op.in]: category.map(cat => cat.id)
-                };
-            }
+            // if(primaryCategoryId){
+            //     const primaryCategory = await Primary_Category.findByPk(primaryCategoryId)
+            //     if(!primaryCategory){
+            //         return res.status(400).json({success: false, message: 'Primary Category not found'})
+            //     }
+            //     const category = await Category.findAll({where: {
+            //         primaryCategoryId: primaryCategory.id
+            //     }})
+            //     whereObject.categoryId = {
+            //         [Op.in]: category.map(cat => cat.id)
+            //     };
+            // }
             if(categoryId){
                 const category = await Category.findByPk(categoryId)
                 if(!category){
@@ -52,11 +52,7 @@ module.exports = {
                 where: whereObject,
                 include: {
                     model: Category,
-                    attributes: {exclude:['createdAt','updatedAt','primaryCategoryId']},
-                    include:{
-                        model: Primary_Category,
-                        attributes: {exclude:['createdAt','updatedAt']},
-                    }
+                    attributes: {exclude:['createdAt','updatedAt']}
                 }
             });
             if(result){
@@ -73,11 +69,7 @@ module.exports = {
             const result = await Product.findByPk(id, {
                 include: {
                     model: Category,
-                    attributes: {exclude:['createdAt','updatedAt','primaryCategoryId']},
-                    include:{
-                        model: Primary_Category,
-                        attributes: {exclude:['createdAt','updatedAt']},
-                    }
+                    attributes: {exclude:['createdAt','updatedAt']},
                 }
             });
             if(!result)

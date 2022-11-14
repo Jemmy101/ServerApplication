@@ -86,10 +86,6 @@ router.post('/', (req, res)=>{
  *      }]
  *      parameters:
  *        - in: query
- *          name: primaryCategoryId
- *          type: number
- *          example: 1
- *        - in: query
  *          name: categoryId
  *          type: number
  *          example: 2
@@ -142,16 +138,7 @@ router.post('/', (req, res)=>{
  *                                                      example: 1
  *                                                  name:
  *                                                      type: string
- *                                                      example: Jackets
- *                                                  Primary_Category:
- *                                                      type: object
- *                                                      properties:
- *                                                          id:
- *                                                              type: number    
- *                                                              example: 1
- *                                                          name:
- *                                                              type: string
- *                                                              example: Woolen             
+ *                                                      example: Jackets           
  *          401:
  *              description: Not authenticated
  *          403:
@@ -225,16 +212,7 @@ router.get('/', (req, res)=>{
  *                                                  example: 1
  *                                              name:
  *                                                  type: string
- *                                                  example: Jackets
- *                                              Primary_Category:
- *                                                  type: object
- *                                                  properties:
- *                                                      id:
- *                                                          type: number    
- *                                                          example: 1
- *                                                      name:
- *                                                          type: string
- *                                                          example: Woolen             
+ *                                                  example: Jackets           
  *          401:
  *              description: Not authenticated
  *          403:

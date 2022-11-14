@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       
-      Category.belongsTo(models.Primary_Category, {
-        foreignKey: 'primaryCategoryId'
-      })
+      // Category.belongsTo(models.Primary_Category, {
+      //   foreignKey: 'primaryCategoryId'
+      // })
       Category.hasMany(models.Product, {
         foreignKey: 'categoryId'
       })
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Category.init({
     name: DataTypes.STRING,
-    primaryCategoryId: DataTypes.INTEGER
+    // primaryCategoryId: DataTypes.INTEGER
   }, {
     sequelize,
     tableName: 'Categories',

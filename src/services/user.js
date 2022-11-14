@@ -32,19 +32,23 @@ const registerUserFn = async (body, isAdmin) => {
                     User.create(body)
                     .then(async user =>{
                         try{
-                            const adminRole = await Role.findOne({where:{role: isAdmin? 'ADMIN' : 'CLIENT'}})
+                            const userRole = await Role.findOne({where:{role: isAdmin? 'ADMIN' : 'CLIENT'}})
 
                             //Create User Role
                             await User_Role.create({
                                 user_id: user.id,
-                                role_id: adminRole.id
+                                role_id: userRole.id
                             })
                             const payload = {
-                            userId: user.id,
                             user:{
-                                Name: user.full_name,
-                                Username: user.user_name,
-                                Email: user.email
+                                id: user.id,
+                                name: user.full_name,
+                                user_name: user.user_name,
+                                email: user.email,
+                                Roles: [{
+                                    id: userRole.id,
+                                    role: userRole.role
+                                }]
                             }
                         }
                             //generate access token

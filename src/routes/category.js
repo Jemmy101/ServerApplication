@@ -24,9 +24,6 @@ const CategoryController = require('../controllers/CategoryController')
  *                          name:
  *                              type: string
  *                              example: Jacket
- *                          primaryCategoryId:
- *                              type: number
- *                              example: 1
  *      responses:
  *          200:
  *              description: OK
@@ -41,12 +38,18 @@ const CategoryController = require('../controllers/CategoryController')
  *                              message:
  *                                  type: object
  *                                  properties:
- *                                      name:
- *                                          type: string
- *                                          example: Jacket
- *                                      primaryCategoryId:
- *                                          type: number
- *                                          example: 1
+*                                       id:
+*                                           type: number
+*                                           example: 1
+*                                       name:
+*                                           type: string
+*                                           example: Jacket
+*                                       createdAt:
+*                                           type: string
+*                                           example: 2022-09-14T20:46:27.491Z
+*                                       updatedAt:
+*                                           type: string
+*                                           example: 2022-09-14T20:46:27.491Z
  *          401:
  *              description: Not authenticated
  *          403:
@@ -73,10 +76,6 @@ router.post('/', (req, res)=>{
  *      }]
  *      parameters:
  *        - in: query
- *          name: primaryCategoryId
- *          type: number
- *          example: 1
- *        - in: query
  *          name: name
  *          type: string
  *          example: woolen
@@ -96,21 +95,18 @@ router.post('/', (req, res)=>{
  *                                  items:
  *                                      type: object
  *                                      properties:
+ *                                          id:
+ *                                              type: number
+ *                                              example: 1
  *                                          name:
  *                                              type: string
  *                                              example: Jacket
- *                                          primaryCategoryId:
- *                                              type: number
- *                                              example: 1
- *                                          Primary_Category:
- *                                              type: object
- *                                              properties:
- *                                                  id:
- *                                                      type: number
- *                                                      example: 6
- *                                                  name:
- *                                                      type: string
- *                                                      example: Jacket
+ *                                          createdAt:
+ *                                              type: string
+ *                                              example: 2022-09-14T20:46:27.491Z
+ *                                          updatedAt:
+ *                                              type: string
+ *                                              example: 2022-09-14T20:46:27.491Z
  *          401:
  *              description: Not authenticated
  *          403:
@@ -150,9 +146,6 @@ router.get('/', (req, res)=>{
  *                          name:
  *                              type: string
  *                              example: Jacket
- *                          primaryCategoryId:
- *                              type: number
- *                              example: 1
  *      responses:
  *          200:
  *              description: OK
@@ -167,12 +160,18 @@ router.get('/', (req, res)=>{
  *                              message:
  *                                  type: object
  *                                  properties:
+ *                                      id:
+ *                                          type: number
+ *                                          example: 1
  *                                      name:
  *                                          type: string
  *                                          example: Jacket
- *                                      primaryCategoryId:
- *                                          type: number
- *                                          example: 1
+ *                                      createdAt:
+ *                                          type: string
+ *                                          example: 2022-09-14T20:46:27.491Z
+ *                                      updatedAt:
+ *                                          type: string
+ *                                          example: 2022-09-14T20:46:27.491Z
  *          401:
  *              description: Not authenticated
  *          403:

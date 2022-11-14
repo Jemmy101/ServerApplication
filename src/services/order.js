@@ -1,15 +1,16 @@
-const {Order, Product, User, Category, Primary_Category} = require('../models')
+const {Order, Product, User, Category} = require('../models')
 const jwt = require('jsonwebtoken');
 const { Op } = require("sequelize");
+const { extractToken} = require('../utils/jwt_utils.js')
 
-function extractToken (req) {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1];
-    } else if (req.query && req.query.token) {
-        return req.query.token;
-    }
-    return null;
-}
+// function extractToken (req) {
+//     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+//         return req.headers.authorization.split(' ')[1];
+//     } else if (req.query && req.query.token) {
+//         return req.query.token;
+//     }
+//     return null;
+// }
 
 module.exports = {
     async createOrder(req, res) {
@@ -41,7 +42,7 @@ module.exports = {
     },
     async getAllOrder(req, res){
         try{
-            const {myOrders, productId, categoryId, primaryCategoryId} = req.query;
+            const {myOrders, productId, categoryId} = req.query;
             let query = {
                 where: {},
                 include:[{
@@ -53,17 +54,14 @@ module.exports = {
                     attributes: ['id','name','code','price'],
                     include: {
                         model: Category,
-                    attributes: {exclude:['createdAt','updatedAt','primaryCategoryId']},
-                        include: {
-                            model: Primary_Category,
-                        attributes: {exclude:['createdAt','updatedAt']},
-                        }
+                    attributes: {exclude:['createdAt','updatedAt']}
                     }
                 }]
             };
-            if(myOrders && myOrders.toLowerCase() === 'true'){
-                const token = extractToken(req);
-                const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            const token = extractToken(req);
+            const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            console.log(decoded.user)
+            if(!decoded.user.Roles.some(val => val.role === 'ADMIN' || val.role === 'SUPER_ADMIN')){
                 query.where = {
                     userId: decoded?.user?.id
                 }
@@ -79,19 +77,19 @@ module.exports = {
                     [Op.in]: products.map(p => p.id)
                 }
             }
-            if(primaryCategoryId){
-                const primaryCategory = await Primary_Category.findByPk(primaryCategoryId, {
-                    include: {
-                        model: Category,
-                        include: {
-                            model: Product
-                        }
-                    }
-                });
-                query.where.productId = {
-                    [Op.in]: primaryCategory?.Categories.reduce((acc, val)=> [...acc, ...val.Products.map(p => p.id)], [])
-                }
-            }
+            // if(primaryCategoryId){
+            //     const primaryCategory = await Primary_Category.findByPk(primaryCategoryId, {
+            //         include: {
+            //             model: Category,
+            //             include: {
+            //                 model: Product
+            //             }
+            //         }
+            //     });
+            //     query.where.productId = {
+            //         [Op.in]: primaryCategory?.Categories.reduce((acc, val)=> [...acc, ...val.Products.map(p => p.id)], [])
+            //     }
+            // }
             const result = await Order.findAll(query);
             if(result){
                 return res.status(200).json({success: true, message: result})
